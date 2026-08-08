@@ -23,11 +23,22 @@ class EventServiceProvider extends \Illuminate\Foundation\Support\Providers\Even
         // Administration
         \Administration\Events\UserCreatedEvent::class => [],
         \Administration\Events\UserUpdatedEvent::class => [],
-        \Administration\Events\UserDeletedEvent::class => [],
+        \Administration\Events\UserDeletedEvent::class => [
+            \Notifications\Events\Listeners\BroadcastUserDeletedListener::class,
+        ],
         \Administration\Events\UserAvatarUpdatedEvent::class => [],
         \Administration\Events\RoleCreatedEvent::class => [],
         \Administration\Events\RoleUpdatedEvent::class => [],
         \Administration\Events\RoleDeletedEvent::class => [],
+
+        // Objects — pozostałe eventy z tej domeny nie mają wpisu, bo implementują ShouldBroadcast
+        // i Laravel rozgłasza je bez listenera. Tu są tylko te, z których robimy wpis w dzwonku.
+        \Objects\Events\ObjectDeletedEvent::class => [
+            \Notifications\Events\Listeners\BroadcastObjectDeletedListener::class,
+        ],
+        \Objects\Events\CameraDeletedEvent::class => [
+            \Notifications\Events\Listeners\BroadcastCameraDeletedListener::class,
+        ],
 
         // FileManager
         \FileManager\Events\FileUploadEvent::class => [],

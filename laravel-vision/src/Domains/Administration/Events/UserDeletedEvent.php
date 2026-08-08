@@ -38,6 +38,36 @@ class UserDeletedEvent implements ShouldBroadcast
     }
 
     /**
+     * Returns the tenant the deleted user belonged to.
+     *
+     * @return int company id
+     */
+    public function getCompanyId(): int
+    {
+        return $this->companyId;
+    }
+
+    /**
+     * Returns the id of the deleted user.
+     *
+     * @return int user id
+     */
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+    /**
+     * Returns the name of the deleted user (snapshot taken before removal).
+     *
+     * @return string user name
+     */
+    public function getUserName(): string
+    {
+        return $this->userName;
+    }
+
+    /**
      * Returns the list of channels the event should be broadcast on (company presence channel).
      *
      * @return array<int, PresenceChannel> list of broadcast channels

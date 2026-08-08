@@ -382,6 +382,18 @@
             "album_created": {
                 "title": "New album",
                 "message": "Album {date} from camera {camera_name} has been created."
+            },
+            "object_deleted": {
+                "title": "Object deleted",
+                "message": "Object {object_name} has been deleted."
+            },
+            "camera_deleted": {
+                "title": "Camera deleted",
+                "message": "Camera {camera_name} has been deleted."
+            },
+            "user_deleted": {
+                "title": "User deleted",
+                "message": "{actor_name} deleted user {user_name}."
             }
         }
     }
