@@ -9,7 +9,8 @@ Monorepo: Laravel 12 API + React 19 SPA + lokalny stack dockerowy.
 2. [`laravel-vision/README.md`](laravel-vision/README.md) — kontrakt domen, request flow, auth, storage.
 3. [`react-vision/README.md`](react-vision/README.md) — struktura frontu, konwencje, dev tips.
 4. [`docker/README.md`](docker/README.md) — kontenery, porty, komendy.
-5. [`laravel-vision/deploy/README.md`](laravel-vision/deploy/README.md) — wdrożenie na HestiaCP.
+5. `laravel-vision/deploy/` — skrypty i configi serwerowe; `env.production.example`
+   ma w nagłówku instrukcję uzupełniania zmiennych, `server-init.sh` wypisuje ręczne kroki.
 
 ## Podprojekty
 
@@ -67,4 +68,6 @@ docker compose down -v                       # reset baz (potem APP_INSTALLED=fa
 HestiaCP, jedna domena, bez Dockera. Upload przez deployment PhpStorma:
 `react-vision/dist/ → public_html/`, `laravel-vision/ → private/`.
 Po każdym uploadzie `deploy/server-update.sh` na serwerze.
-Szczegóły i lista wykluczeń z uploadu: [`laravel-vision/deploy/README.md`](laravel-vision/deploy/README.md).
+Backend leci prosto z folderu roboczego, więc deployment MUSI wykluczać `.env`, `storage`,
+`bootstrap/cache`, `vendor`, `node_modules`, `.idea` — inaczej upload nadpisze produkcyjny env
+i zdjęcia z kamer. Szczegóły w [`README.md`](README.md#production).

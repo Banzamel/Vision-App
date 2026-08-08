@@ -105,4 +105,4 @@ Tests live under `tests/Unit` (services, listeners, policies — currently 145/1
 
 Production runs on HestiaCP (single domain, no Docker): Apache+nginx hybrid, PHP-FPM 8.4 per-domain socket, Supervisor for queue workers + Reverb. This folder is uploaded as-is to `private/` over PhpStorm's SFTP deployment; `react-vision/dist/` goes to `public_html/`.
 
-Scripts and server configs live in [`deploy/`](deploy/README.md) — `server-init.sh` (one-time setup), `server-update.sh` (after every upload), plus the nginx fragment, supervisor entries and cron instructions.
+Scripts and server configs live in `deploy/` — `server-init.sh` (one-time setup, and it prints the remaining manual steps: nginx, supervisor, cron), `server-update.sh` (run over SSH after every upload), plus the nginx fragment, the supervisor entries and the production env template.

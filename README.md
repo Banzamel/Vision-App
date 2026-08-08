@@ -27,10 +27,20 @@ First boot takes ~2 min (Composer install, migrations, Passport keys, Vite first
 
 ## Production
 
-HestiaCP, single domain, no Docker. `react-vision/dist/` is uploaded to `public_html/` and
-`laravel-vision/` straight to `private/` via PhpStorm's SFTP deployment — see
-[`laravel-vision/deploy/README.md`](laravel-vision/deploy/README.md) for the layout, the upload
-exclusions and the init/update procedure.
+HestiaCP, single domain, no Docker. PhpStorm's SFTP deployment uploads `react-vision/dist/` to
+`public_html/` and `laravel-vision/` straight to `private/`, so `laravel-vision/deploy/` lands on
+the server as `private/deploy/`.
+
+Because the backend ships from the working folder, the deployment config **must** exclude
+`.env`, `storage`, `bootstrap/cache`, `vendor`, `node_modules`, `.idea` and
+`.phpunit.result.cache` — otherwise an upload overwrites the server's env and the camera photos
+under `storage/app/private`.
+
+- First time: `bash private/deploy/server-init.sh`, then follow the manual steps it prints
+  (nginx fragment, supervisor entries, the scheduler cron via the HestiaCP panel), then open
+  `/install`.
+- Every deploy: `npm run build`, upload both mappings, then
+  `ssh webmaster@vision.banzamel.pl 'bash …/private/deploy/server-update.sh'`.
 
 ## Reset everything
 
