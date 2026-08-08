@@ -86,3 +86,24 @@ Po każdym uploadzie `deploy/server-update.sh` na serwerze.
 Backend leci prosto z folderu roboczego, więc deployment MUSI wykluczać `.env`, `storage`,
 `bootstrap/cache`, `vendor`, `node_modules`, `.idea` — inaczej upload nadpisze produkcyjny env
 i zdjęcia z kamer. Szczegóły w [`README.md`](../README.md#production).
+
+**Reverb: worker publikuje pod inny adres niż przeglądarka.** `REVERB_HOST/PORT/SCHEME` to
+publiczny endpoint za nginxem (443/https), a worker kolejki wypycha eventy REST-owym API
+prosto do procesu — od tego są `REVERB_BROADCAST_HOST/PORT/SCHEME` (127.0.0.1/8080/http).
+Bez nich publikacja idzie w nginxa, wraca 404 i każdy broadcast ląduje w `failed_jobs`.
+`REVERB_SERVER_PATH` zostaw **puste**: publiczny prefiks `/ws` ucina nginx końcowym slashem
+w `proxy_pass`. Prefiks po stronie Reverba psuje publikację — klient Pushera podpisuje
+żądanie ścieżką bez prefiksu, a Reverb weryfikuje podpis pełną ścieżką (401).
+
+**`queue:retry all` potrafi utknąć na jednym jobie.** Komenda odserializowuje payload, żeby
+sprawdzić `retryUntil()`, więc broadcast trzymający model usunięty w międzyczasie rzuca
+`ModelNotFoundException` i przerywa **całą** pętlę. Sam worker jest na to odporny
+(`BroadcastEvent::$deleteWhenMissingModels = true`, czytane przez `resolveQueuedJobClass()`),
+więc to luka wyłącznie w komendzie serwisowej — nie ma czego dodawać we własnych eventach.
+Obejście: job po jobie, martwe wyrzucaj.
+
+```bash
+for id in $(php8.4 artisan queue:failed | awk '{print $3}' | grep -E '^[0-9a-f-]{36}$'); do
+    php8.4 artisan queue:retry "$id" || php8.4 artisan queue:forget "$id"
+done
+```
