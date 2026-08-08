@@ -17,7 +17,9 @@ class GenerateThumbnailListenerTest extends TestCase
         $listener = new GenerateThumbnailListener(Mockery::mock(ThumbnailServiceInterface::class));
 
         $this->assertInstanceOf(ShouldQueue::class, $listener);
-        $this->assertSame('default', $listener->queue);
+        // Nazwa kolejki NIE może być zaszyta w listenerze — job ma iść na kolejkę
+        // z konfiguracji połączenia (REDIS_QUEUE), tę samą, której słucha worker.
+        $this->assertFalse(property_exists($listener, 'queue'));
     }
 
     public function test_handle_forwards_photo_to_thumbnail_service(): void

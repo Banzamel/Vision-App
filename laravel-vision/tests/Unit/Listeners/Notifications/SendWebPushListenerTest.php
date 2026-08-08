@@ -19,7 +19,8 @@ class SendWebPushListenerTest extends TestCase
         $listener = new SendWebPushListener($sender);
 
         $this->assertInstanceOf(ShouldQueue::class, $listener);
-        $this->assertSame('default', $listener->queue);
+        // Patrz GenerateThumbnailListenerTest — kolejka pochodzi z REDIS_QUEUE, nie z listenera.
+        $this->assertFalse(property_exists($listener, 'queue'));
     }
 
     public function test_handle_forwards_notification_payload_to_sender(): void

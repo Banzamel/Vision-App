@@ -13,10 +13,8 @@ use Push\Services\Interfaces\WebPushSenderInterface;
  */
 class SendWebPushListener implements ShouldQueue
 {
-    /**
-     * @var string Queue name — keep on the same default queue as the WS broadcasters.
-     */
-    public string $queue = 'default';
+    // Bez $queue celowo — patrz GenerateThumbnailListener. Nazwę kolejki bierzemy
+    // z konfiguracji połączenia (REDIS_QUEUE), nie zaszywamy jej w listenerze.
 
     /**
      * @param WebPushSenderInterface $sender Adapter around minishlink/web-push.

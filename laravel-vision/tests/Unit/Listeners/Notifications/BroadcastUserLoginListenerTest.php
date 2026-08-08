@@ -33,6 +33,8 @@ class BroadcastUserLoginListenerTest extends TestCase
     public function test_implements_should_queue(): void
     {
         $this->assertInstanceOf(ShouldQueue::class, $this->listener);
+        // Patrz GenerateThumbnailListenerTest — kolejka pochodzi z REDIS_QUEUE, nie z listenera.
+        $this->assertFalse(property_exists($this->listener, 'queue'));
     }
 
     public function test_skips_actor_and_notifies_other_company_members(): void

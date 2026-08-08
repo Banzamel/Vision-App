@@ -13,12 +13,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
  */
 class GenerateThumbnailListener implements ShouldQueue
 {
-    /**
-     * Queue name — matches the default Vision worker started by supervisord (`queue:listen`).
-     *
-     * @var string|null
-     */
-    public ?string $queue = 'default';
+    // Bez $queue celowo — job trafia na kolejkę skonfigurowaną dla połączenia
+    // (queue.connections.redis.queue → REDIS_QUEUE). Zaszycie tu 'default' rozjeżdżało
+    // się z workerem, gdy REDIS_QUEUE wskazywał inną nazwę, i joby cicho nie schodziły.
 
     /**
      * @param ThumbnailServiceInterface $thumbnails Thumbnail generator service.

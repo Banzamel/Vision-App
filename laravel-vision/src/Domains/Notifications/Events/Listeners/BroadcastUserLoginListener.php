@@ -15,7 +15,7 @@ use Notifications\Services\Interfaces\NotificationServiceInterface;
  */
 class BroadcastUserLoginListener implements ShouldQueue
 {
-    public ?string $queue = 'default';
+    // Bez $queue celowo — patrz GenerateThumbnailListener.
 
     public function __construct(
         protected NotificationServiceInterface $notifications,
