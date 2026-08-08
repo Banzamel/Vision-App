@@ -1,5 +1,5 @@
 # Vision SPA fallback — kopiowane z react-vision/public/ do dist/ przez Vite,
-# stamtąd do prod/public_html/ przez build.sh. Apache (HestiaCP backend)
+# stamtąd do public_html/ przez deployment PhpStorma. Apache (HestiaCP backend)
 # czyta to z DocumentRoot domeny.
 #
 # Każdy URL który nie odpowiada plikowi/katalogowi w public_html wraca

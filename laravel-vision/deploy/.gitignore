@@ -1,0 +1,3 @@
+# Lokalne sekrety — nigdy do gita.
+deploy.env
+.env.production
