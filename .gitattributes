@@ -1,0 +1,22 @@
+# Normalizacja końców linii: w repo zawsze LF, na dysku wg reguł poniżej.
+#
+# WAŻNE: PhpStorm wysyła na produkcję kopię roboczą 1:1 (laravel-vision/ → private/),
+# a Windows ma core.autocrlf=true. Bez tego pliku deploy/*.sh trafiałyby na serwer
+# z CRLF i shebang `#!/usr/bin/env bash\r` wywalałby się z "bad interpreter".
+* text=auto eol=lf
+
+# Skrypty, dla których końce linii mają znaczenie funkcjonalne:
+*.sh   text eol=lf
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binaria — bez konwersji.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webp binary
+*.ico  binary
+*.woff  binary
+*.woff2 binary
+*.pdf  binary
