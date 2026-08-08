@@ -4,7 +4,7 @@ Five containers wired together by `docker-compose.yml` (one level up):
 
 | Container        | Image / build                  | Port   | Role                                            |
 |------------------|--------------------------------|--------|-------------------------------------------------|
-| `mysql-vision`   | `mysql:8`                      | `3306` | Primary database.                               |
+| `mysql-vision`   | `mysql:8.3`                    | `3306` | Primary database.                               |
 | `redis-vision`   | `redis:7-alpine`               | `6379` | Cache, queues, sessions, Reverb pub/sub.        |
 | `laravel-vision` | `docker/php/Dockerfile`        | `8000` | API + queue worker + scheduler (supervisord).   |
 | `reverb-vision`  | reuses `laravel-vision` image  | `8080` | WebSocket broadcaster (`artisan reverb:start`). |
@@ -19,6 +19,9 @@ Five containers wired together by `docker-compose.yml` (one level up):
 
 ## Boot flow
 
+0. Before the first `up`, make sure `react-vision/.npmrc` exists (gitignored — it carries the
+   `api.mineralui.io` auth token). `@banzamel/mineralui-pro` installs from that private registry;
+   without the token the `react-vision` container's `npm install` fails with 401.
 1. `docker compose up --build` builds the PHP image and pulls the rest.
 2. `mysql-vision` becomes healthy → `laravel-vision` starts.
 3. `laravel-init.sh` runs: composer install if needed, `db:monitor` until ready, `migrate:fresh --seed` (first boot) or `migrate` (subsequent), Passport keys + `Vision Web` public client.

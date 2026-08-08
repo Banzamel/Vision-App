@@ -5,7 +5,7 @@ React 19 + TypeScript SPA for Vision. Built on top of [MineralUI Pro](https://mi
 ## Stack
 
 - React 19, TypeScript 5
-- Vite 7 (dev server + build)
+- Vite 8 (dev server + build)
 - React Router v6
 - `@banzamel/mineralui-pro` (UI components, theming, i18n, icons, illustrations, toasts, modals)
 - Laravel Echo + pusher-js (realtime via Reverb)

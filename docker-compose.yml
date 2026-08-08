@@ -72,17 +72,14 @@ services:
     react-vision:
         image: node:22-bookworm-slim
         container_name: react-vision
-        # working_dir + volumes mirror the host folder layout so the
-        # `file:../../project-banzamel/mineralui/build/pro` link in package.json
-        # resolves identically on host and inside the container.
-        working_dir: /workspace/project-vision/react-vision
+        # @banzamel/mineralui-pro jest zwykłą zależnością z prywatnego rejestru
+        # (api.mineralui.io) — nie ma już linku `file:` do lokalnego repo mineralui,
+        # więc kontener nie potrzebuje żadnego mountu poza samym react-vision.
+        # npm install czyta token z react-vision/.npmrc (gitignored), który jedzie w tym mouncie.
+        working_dir: /app
         env_file: .env
         volumes:
-            - ./react-vision:/workspace/project-vision/react-vision
-            # Mounts the whole mineralui source repo (writable: npm install chmods bin scripts when
-            # linking the file: dep). Vision's package.json points `@banzamel/mineralui-pro` at the
-            # repo root, so the container needs the parent dir, not just the `build/pro` subpath.
-            - ../project-banzamel/mineralui:/workspace/project-banzamel/mineralui
+            - ./react-vision:/app
         entrypoint: ["sh", "-c", "[ -f node_modules/.install.stamp ] || (npm install && touch node_modules/.install.stamp); npm run dev -- --host 0.0.0.0 --port 5173"]
         ports:
             - "5173:5173"
