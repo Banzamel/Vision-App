@@ -34,7 +34,9 @@ lokalnymi. W konfiguracji deploymentu **muszą** być wykluczone:
 
 ## Pierwsze uruchomienie
 
-1. Zbuduj front: `cd react-vision && npm run build` (potrzebny `react-vision/.env.production`).
+1. Zbuduj front: `cd react-vision && npm run build`. Wymaga `react-vision/.env.production`,
+   a w nim **`VITE_REVERB_PATH=/ws`** — bez tego pusher-js łączy się w `wss://host/app/{key}`,
+   czego nginx już nie obsługuje (WebSocket wpada w SPA fallback i realtime milczy).
 2. Wyślij oba mapowania z PhpStorma.
 3. Na serwerze:
    ```bash
@@ -65,7 +67,7 @@ lokalnymi. W konfiguracji deploymentu **muszą** być wykluczone:
 |---------------------------|----------------------------------------------------------------------|
 | `server-init.sh`          | Jednorazowy setup: extensions, `.env`, composer, APP_KEY, klucze Passport, symlink storage, cache. |
 | `server-update.sh`        | Po każdym uploadzie: composer, migracje, cache, `queue:restart`, restart Reverba. |
-| `nginx-vision.conf`       | Fragment do `nginx.ssl.conf_custom`: `/api`, `/oauth`, `/broadcasting`, `/up` → PHP-FPM; `/app` → Reverb; no-cache dla `sw.js`/`index.html`/manifestu. |
+| `nginx-vision.conf`       | Fragment do `nginx.ssl.conf_custom`: `/api`, `/oauth`, `/broadcasting`, `/up` → PHP-FPM; `/ws/` → Reverb; no-cache dla `sw.js`/`index.html`/manifestu. |
 | `supervisor-vision.conf`  | `vision-queue` (2 workery) + `vision-reverb` (127.0.0.1:8080).       |
 | `cron.txt`                | Instrukcja dodania `schedule:run` przez panel HestiaCP.              |
 | `env.production.example`  | Szablon produkcyjnego `.env`.                                        |

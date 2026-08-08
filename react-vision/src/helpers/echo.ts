@@ -12,6 +12,7 @@ interface EchoConfig {
     host: string
     port: number
     scheme: 'http' | 'https'
+    path: string
     authEndpoint: string
 }
 
@@ -19,11 +20,16 @@ const TOKEN_KEY = 'vision-auth-token'
 
 function readConfig(): EchoConfig {
     const baseApi = (import.meta.env.VITE_API_URL ?? '/api').replace(/\/$/, '')
+    // Prefiks ścieżki przed pusher-jsowym /app/{key}. Pusty lokalnie (przeglądarka puka
+    // wprost w kontener Reverba na :8080), '/ws' na produkcji — tam nginx proxuje /ws/
+    // na 127.0.0.1:8080 i ucina prefiks, więc Reverb widzi swoje natywne /app/{key}.
+    const rawPath = import.meta.env.VITE_REVERB_PATH ?? ''
     return {
         key: import.meta.env.VITE_REVERB_APP_KEY ?? 'vision-app-key',
         host: import.meta.env.VITE_REVERB_HOST ?? window.location.hostname,
         port: Number(import.meta.env.VITE_REVERB_PORT ?? 8080),
         scheme: (import.meta.env.VITE_REVERB_SCHEME ?? 'http') as 'http' | 'https',
+        path: rawPath ? `/${rawPath.replace(/^\/+|\/+$/g, '')}` : '',
         authEndpoint: `${baseApi}/broadcasting/auth`,
     }
 }
@@ -42,6 +48,7 @@ export function createEchoInstance(): Echo<'reverb'> {
         wsHost: cfg.host,
         wsPort: cfg.port,
         wssPort: cfg.port,
+        wsPath: cfg.path,
         forceTLS: cfg.scheme === 'https',
         enabledTransports: ['ws', 'wss'],
         authEndpoint: cfg.authEndpoint,
