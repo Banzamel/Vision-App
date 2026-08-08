@@ -7,7 +7,10 @@
 Thumbs.db
 
 # ── Workspace / local agent state ────────────────────────
-.claude/
+# .claude/settings.json + CLAUDE.md są wspólne dla zespołu i wchodzą do repo;
+# per-maszynowe nadpisania zostają lokalnie.
+.claude/settings.local.json
+.claude/*.lock
 tmp/
 *.log
 
@@ -48,8 +51,9 @@ react-vision/coverage/
 react-vision/.mineralui-pro/
 .mineralui-pro/
 
-# ── Production deploy (build artifacts + scripts + configs) ─
-prod/
+# ── Production deploy ────────────────────────────────────
+# Skrypty i configi serwerowe są wersjonowane w laravel-vision/deploy/ (własny .gitignore
+# na sekrety). Build frontu leci prosto z react-vision/dist/, więc nie ma już folderu prod/.
 
 # ── Docker volumes / runtime data ────────────────────────
 docker/data/
