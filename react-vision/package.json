@@ -12,7 +12,7 @@
         "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\""
     },
     "dependencies": {
-        "@banzamel/mineralui-pro": "^1.11.1",
+        "@banzamel/mineralui-pro": "^2.1.4",
         "laravel-echo": "^2.2.0",
         "pusher-js": "^8.4.0",
         "react": "^19.2.4",
